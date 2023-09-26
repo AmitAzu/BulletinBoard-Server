@@ -1,2 +1,2 @@
-# BulletinBoard-server
+# BulletinBoard-Server
 ITI Interview
