@@ -12,7 +12,7 @@ Before running the server, make sure you have Node.js and npm (Node Package Mana
 
 write this lines in your terminal:
 ```bash
-git clone <repository-url>
+git clone <git@github.com:AmitAzu/BulletinBoard-Server.git>
 cd bulletinBoard-Server
 npm install
 ```
