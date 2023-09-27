@@ -50,8 +50,9 @@ const fetchAndSaveData = async () => {
         id: post.id,
         title: post.title,
         userName: user.username,
+        body: post.body,
         geo: user.address.geo,
-        imageUrl: photo.url,
+        imageUrl: photo.url
       };
       bulletins.push(bulletin);
     }
@@ -67,7 +68,7 @@ const checkJsonFile = () => {
       const data = fs.readFileSync(jsonFilePath, "utf-8");
       return JSON.parse(data);
     }
-    return null; // File doesn't exist
+    return null; 
   } catch (error) {
     console.error(`Error reading JSON file: ${error}`);
     return null;
@@ -84,15 +85,15 @@ app.post("/addBulletin", (req, res) => {
       id: req.body.id,
       title: req.body.title,
       userName: req.body.userName,
-      geo: req.body.geo,
-      imageUrl: req.body.imageUrl,
       body: req.body.body,
+      geo: req.body.geo,
+      imageUrl: req.body.imageUrl
     };
-    console.log(req.body)
+
     existingData.bulletins.unshift(newBulletin);
 
     fs.writeFileSync(jsonFilePath, JSON.stringify(existingData, null, 2));
-
+    console.debug(`Bulletin id: ${newBulletin.id} added successfully`);
     res.json({
       message: "Bulletin added successfully",
       bulletin: newBulletin,
@@ -108,9 +109,11 @@ app.get("/getBulletin", async (req, res) => {
     const cachedData = checkJsonFile();
 
     if (cachedData) {
+      console.debug(`Bulletins saved locally were sent successfully.`);
       res.json(cachedData);
     } else {
       const bulletins = await fetchAndSaveData();
+      console.debug(`${bulletins.length} Bulletins were reimported and sent successfully.`);
       res.json({ bulletins });
     }
   } catch (error) {
@@ -131,6 +134,7 @@ app.delete("/deleteBulletin/:id", (req, res) => {
     );
 
     if (bulletinIndex === -1) {
+      console.error(`Bulletin ID: ${req.params.id} not found, and therefore, the deletion failed.`)
       res.status(404).json({ error: "Bulletin not found" });
     } else {
       consolidatedData.bulletins.splice(bulletinIndex, 1);
@@ -139,7 +143,7 @@ app.delete("/deleteBulletin/:id", (req, res) => {
         "consolidatedData.json",
         JSON.stringify(consolidatedData, null, 2)
       );
-
+      console.debug(`Bulletin id: ${req.params.id} deleted successfully`)
       res.json({ message: "Bulletin deleted successfully" });
     }
   } catch (error) {
@@ -151,4 +155,15 @@ app.delete("/deleteBulletin/:id", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+// delete json local file for tests
+// process.on('SIGINT', async () => {
+//   try {
+//       await fs.promises.unlink(jsonFilePath);
+//       process.exit(0);
+//   } catch (err) {
+//       process.exit(1); 
+//   }
+// });
 

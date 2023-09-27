@@ -25,6 +25,7 @@ export interface Bulletin {
   id: number;
   title: string;
   userName: string;
+  body: string;
   geo: {
     lat: string;
     lng: string;
