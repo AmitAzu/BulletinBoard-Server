@@ -12,8 +12,12 @@ Before running the server, make sure you have Node.js and npm (Node Package Mana
 
 write this lines in your terminal:
 ```bash
-git clone <git@github.com:AmitAzu/BulletinBoard-Server.git>
+git clone git@github.com:AmitAzu/BulletinBoard-Server.git
+```
+```bash
 cd bulletinBoard-Server
+```
+```bash
 npm install
 ```
 
@@ -21,6 +25,8 @@ npm install
 To start the Node.js server, run the following command:
 ```bash
 cd bulletinBoard-Server/src
+```
+```bash
 ts-node index.ts
 ```
 
